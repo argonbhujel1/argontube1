@@ -35,9 +35,9 @@ login_manager.login_view = 'login'
 # Database connection
 def get_db():
     """Get database connection"""
-   # Use /tmp for database on Render (persistent storage)
-db_path = os.environ.get('DATABASE_PATH', 'database.db')
-conn = sqlite3.connect(db_path)
+    # Use /tmp for database on Render (persistent storage)
+    db_path = os.environ.get('DATABASE_PATH', 'database.db')
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
