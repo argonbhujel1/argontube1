@@ -27,10 +27,6 @@ app.config['ALLOWED_IMAGE_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['THUMBNAIL_FOLDER'], exist_ok=True)
 
-# Ensure database directory is writable (for Render)
-db_path = os.environ.get('DATABASE_PATH', '/tmp/database.db')
-os.makedirs(os.path.dirname(db_path), exist_ok=True)
-
 # Initialize Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -39,9 +35,9 @@ login_manager.login_view = 'login'
 # Database connection
 def get_db():
     """Get database connection"""
-    # Use /tmp for database on Render (persistent storage)
-    db_path = os.environ.get('DATABASE_PATH', 'database.db')
-    conn = sqlite3.connect(db_path)
+   # Use /tmp for database on Render (persistent storage)
+db_path = os.environ.get('DATABASE_PATH', 'database.db')
+conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -967,9 +963,7 @@ def notification_count():
     ).fetchone()[0]
     conn.close()
     return jsonify({'count': count})
-# Initialize database on startup
-init_db()
-
 # Run the application
 if __name__ == '__main__':
+    init_db()
     app.run(debug=True, host='0.0.0.0', port=5000)
