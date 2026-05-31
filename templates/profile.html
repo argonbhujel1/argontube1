@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}My Channel - ArgonTube{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header glass-card">
+        <div class="profile-banner" style="background: linear-gradient(135deg, #ff0000, #cc0000); height: 200px;">
+            {% if current_user.banner_pic and current_user.banner_pic != 'default_banner.jpg' %}
+            <img src="{{ url_for('static', filename='thumbnails/' + current_user.banner_pic) }}" 
+                 alt="Channel banner" class="banner-image"
+                 onerror="this.style.display='none'">
+            {% endif %}
+        </div>
+        <div class="profile-info">
+            <div class="profile-avatar-container">
+                {% if current_user.profile_pic and current_user.profile_pic != 'default.jpg' %}
+                <img src="{{ url_for('static', filename='thumbnails/' + current_user.profile_pic) }}" 
+                     alt="Profile" class="profile-avatar"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                {% endif %}
+                <div class="avatar-placeholder" style="width:80px; height:80px; border-radius:50%; background:#444; display:flex; align-items:center; justify-content:center;">
+                    <span style="color:white; font-size:32px; font-weight:bold;">{{ current_user.username[0].upper() }}</span>
+                </div>
+            </div>
+            <div class="profile-details">
+                <h1>{{ current_user.username }}</h1>
+                <p>{{ current_user.email }}</p>
+                <p class="profile-joined">Joined {{ current_user.created_at[:10] if current_user.created_at else 'Recently' }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="profile-content">
+        <div class="profile-videos-section">
+            <h2>
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9h-4v4h-2v-4H9V9h4V5h2v4h4v2z"/>
+                </svg>
+                Your Videos
+            </h2>
+            
+            {% if videos %}
+            <div class="video-grid">
+                {% for video in videos %}
+                <div class="video-card glass-card">
+                    <a href="{{ url_for('watch', video_id=video.id) }}" class="video-thumbnail-link">
+                        <div class="video-thumbnail">
+                            <img src="{{ url_for('static', filename='thumbnails/' + video.thumbnail) }}" 
+                                 alt="{{ video.title }}" loading="lazy"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="thumbnail-placeholder" style="display:none;">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="white" d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                            <span class="video-duration">{{ video.duration }}</span>
+                        </div>
+                    </a>
+                    <div class="video-info">
+                        <h3 class="video-title">
+                            <a href="{{ url_for('watch', video_id=video.id) }}">{{ video.title }}</a>
+                        </h3>
+                        <div class="video-meta">
+                            <span>{{ video.views }} views</span>
+                            <span>•</span>
+                            <span>{{ video.created_at[:10] }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-videos">
+                <svg viewBox="0 0 24 24" width="64" height="64">
+                    <path fill="#666" d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>
+                </svg>
+                <p>You haven't uploaded any videos yet.</p>
+                <a href="{{ url_for('upload') }}" class="upload-cta-btn">Upload Your First Video</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}	

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error - ArgonTube{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <div class="error-card glass-card">
+        <h1 class="error-code">500</h1>
+        <div class="error-icon">
+            <svg viewBox="0 0 24 24" width="64" height="64">
+                <path fill="#ff0000" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+        </div>
+        <h2>Something Went Wrong</h2>
+        <p>We're experiencing technical difficulties. Please try again later.</p>
+        <a href="{{ url_for('home') }}" class="back-home-btn">
+            <svg viewBox="0 0 24 24" width="20" height="20">
+                <path fill="currentColor" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            Back to Home
+        </a>
+    </div>
+</div>
+{% endblock %}

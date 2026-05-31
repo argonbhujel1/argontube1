@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+venv/
+*.egg-info/
+
+# Database
+*.db
+
+# Uploads
+static/uploads/*
+static/thumbnails/*
+!static/uploads/.gitkeep
+!static/thumbnails/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Ngrok
+ngrok*	

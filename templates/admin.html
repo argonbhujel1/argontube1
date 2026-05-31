@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel - ArgonTube{% endblock %}
+
+{% block content %}
+<div class="admin-container">
+    <div class="admin-header glass-card">
+        <h1>
+            <svg viewBox="0 0 24 24" width="28" height="28">
+                <path fill="#ff0000" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+            </svg>
+            Admin Dashboard
+        </h1>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="stats-grid">
+        <div class="stat-card glass-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32">
+                    <path fill="#ff0000" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                </svg>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_users }}</span>
+                <span class="stat-label">Total Users</span>
+            </div>
+        </div>
+        
+        <div class="stat-card glass-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32">
+                    <path fill="#ff0000" d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/>
+                </svg>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_videos }}</span>
+                <span class="stat-label">Total Videos</span>
+            </div>
+        </div>
+        
+        <div class="stat-card glass-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32">
+                    <path fill="#ff0000" d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                </svg>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_views }}</span>
+                <span class="stat-label">Total Views</span>
+            </div>
+        </div>
+        
+        <div class="stat-card glass-card">
+            <div class="stat-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32">
+                    <path fill="#ff0000" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                </svg>
+            </div>
+            <div class="stat-info">
+                <span class="stat-value">{{ total_comments }}</span>
+                <span class="stat-label">Total Comments</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Videos -->
+    <div class="admin-section glass-card">
+        <h2>Recent Videos</h2>
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Uploader</th>
+                        <th>Views</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for video in recent_videos %}
+                    <tr>
+                        <td>{{ video.id }}</td>
+                        <td><a href="{{ url_for('watch', video_id=video.id) }}" class="admin-link">{{ video.title }}</a></td>
+                        <td>{{ video.username }}</td>
+                        <td>{{ video.views }}</td>
+                        <td>{{ video.created_at[:10] }}</td>
+                        <td>
+                            <a href="{{ url_for('admin_delete_video', video_id=video.id) }}" 
+                               class="admin-action-btn delete-btn"
+                               onclick="return confirm('Delete this video?')">
+                                <svg viewBox="0 0 24 24" width="16" height="16">
+                                    <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                </svg>
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- Recent Users -->
+    <div class="admin-section glass-card">
+        <h2>Recent Users</h2>
+        <div class="admin-table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in recent_users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.is_admin %}
+                            <span class="badge badge-admin">Admin</span>
+                            {% else %}
+                            <span class="badge badge-user">User</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.created_at[:10] }}</td>
+                        <td>
+                            {% if user.id != current_user.id %}
+                            <a href="{{ url_for('admin_delete_user', user_id=user.id) }}" 
+                               class="admin-action-btn delete-btn"
+                               onclick="return confirm('Delete this user and all their content?')">
+                                <svg viewBox="0 0 24 24" width="16" height="16">
+                                    <path fill="currentColor" d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                                Remove
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}	

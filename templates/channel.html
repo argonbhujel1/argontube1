@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}{{ channel_user.username }} - ArgonTube{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header glass-card">
+        <div class="profile-banner">
+            <img src="{{ url_for('static', filename='thumbnails/' + channel_user.banner_pic) }}" 
+                 alt="Channel banner" class="banner-image"
+                 onerror="this.style.background='linear-gradient(135deg, #ff0000, #cc0000)'">
+        </div>
+        <div class="profile-info">
+            <div class="profile-avatar-container">
+                <img src="{{ url_for('static', filename='thumbnails/' + channel_user.profile_pic) }}" 
+                     alt="Profile" class="profile-avatar"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="avatar-placeholder" style="display:none; width:80px; height:80px; border-radius:50%; background:#444; align-items:center; justify-content:center;">
+                    <span style="color:white; font-size:32px; font-weight:bold;">{{ channel_user.username[0].upper() }}</span>
+                </div>
+            </div>
+            <div class="profile-details">
+                <h1>{{ channel_user.username }}</h1>
+                <p class="subscriber-count-display">{{ subscriber_count }} subscribers</p>
+                {% if current_user.is_authenticated and current_user.id != channel_user.id %}
+                <a href="{{ url_for('subscribe', channel_id=channel_user.id) }}" 
+                   class="subscribe-btn-large {% if is_subscribed %}subscribed{% endif %}">
+                    {{ 'Subscribed' if is_subscribed else 'Subscribe' }}
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="profile-content">
+        <div class="profile-videos-section">
+            <h2>Uploaded Videos</h2>
+            
+            {% if videos %}
+            <div class="video-grid">
+                {% for video in videos %}
+                <div class="video-card glass-card">
+                    <a href="{{ url_for('watch', video_id=video.id) }}" class="video-thumbnail-link">
+                        <div class="video-thumbnail">
+                            <img src="{{ url_for('static', filename='thumbnails/' + video.thumbnail) }}" 
+                                 alt="{{ video.title }}" loading="lazy"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div class="thumbnail-placeholder" style="display:none;">
+                                <svg viewBox="0 0 24 24" width="48" height="48">
+                                    <path fill="white" d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                            <span class="video-duration">{{ video.duration }}</span>
+                        </div>
+                    </a>
+                    <div class="video-info">
+                        <h3 class="video-title">
+                            <a href="{{ url_for('watch', video_id=video.id) }}">{{ video.title }}</a>
+                        </h3>
+                        <div class="video-meta">
+                            <span>{{ video.views }} views</span>
+                            <span>•</span>
+                            <span>{{ video.created_at[:10] }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="no-videos">
+                <p>This channel hasn't uploaded any videos yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

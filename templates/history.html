@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Watch History - ArgonTube{% endblock %}
+
+{% block content %}
+<div class="history-container">
+    <div class="section-header glass-card">
+        <h1>
+            <svg viewBox="0 0 24 24" width="28" height="28">
+                <path fill="#ff0000" d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+            </svg>
+            Watch History
+        </h1>
+    </div>
+    
+    {% if videos %}
+    <div class="video-grid">
+        {% for video in videos %}
+        <div class="video-card glass-card">
+            <a href="{{ url_for('watch', video_id=video.id) }}" class="video-thumbnail-link">
+                <div class="video-thumbnail">
+                    <img src="{{ url_for('static', filename='thumbnails/' + video.thumbnail) }}" 
+                         alt="{{ video.title }}" loading="lazy"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="thumbnail-placeholder" style="display:none;">
+                        <svg viewBox="0 0 24 24" width="48" height="48">
+                            <path fill="white" d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                    <span class="video-duration">{{ video.duration }}</span>
+                </div>
+            </a>
+            <div class="video-info">
+                <h3 class="video-title">
+                    <a href="{{ url_for('watch', video_id=video.id) }}">{{ video.title }}</a>
+                </h3>
+                <span class="channel-name">{{ video.channel_name }}</span>
+                <div class="video-meta">
+                    <span>{{ video.views }} views</span>
+                    <span>•</span>
+                    <span>Watched: {{ video.last_watched[:10] }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-videos glass-card">
+        <svg viewBox="0 0 24 24" width="64" height="64">
+            <path fill="#666" d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+        </svg>
+        <p>No watch history yet.</p>
+        <a href="{{ url_for('home') }}" class="upload-cta-btn">Start Watching</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

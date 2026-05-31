@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Notifications - ArgonTube{% endblock %}
+
+{% block content %}
+<div class="notifications-container">
+    <div class="section-header glass-card">
+        <h1>
+            <svg viewBox="0 0 24 24" width="28" height="28">
+                <path fill="#ff0000" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            Notifications
+        </h1>
+    </div>
+    
+    {% if notifications %}
+    <div class="notifications-list">
+        {% for notification in notifications %}
+        <div class="notification-item glass-card {% if not notification.is_read %}unread{% endif %}">
+            <div class="notification-icon">
+                {% if 'commented' in notification.message %}
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="#ff0000" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+                </svg>
+                {% elif 'subscribed' in notification.message %}
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="#ff0000" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                </svg>
+                {% else %}
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="#ff0000" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+                {% endif %}
+            </div>
+            <div class="notification-content">
+                <p>{{ notification.message }}</p>
+                <span class="notification-time">{{ notification.created_at[:10] }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-notifications glass-card">
+        <svg viewBox="0 0 24 24" width="64" height="64">
+            <path fill="#666" d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+        </svg>
+        <p>No notifications yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

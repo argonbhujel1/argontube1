@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results - ArgonTube{% endblock %}
+
+{% block content %}
+<div class="search-container">
+    <div class="search-header glass-card">
+        <h1>Search Results</h1>
+        {% if query %}
+        <p>Showing results for: <strong>{{ query }}</strong></p>
+        {% endif %}
+        
+        <div class="category-filters">
+            <a href="{{ url_for('search', q=query) }}" class="filter-btn {% if not selected_category %}active{% endif %}">All</a>
+            {% for category in categories %}
+            <a href="{{ url_for('search', q=query, category=category.id) }}" 
+               class="filter-btn {% if selected_category == category.id|string %}active{% endif %}">
+                {{ category.icon }} {{ category.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    {% if videos %}
+    <div class="video-grid">
+        {% for video in videos %}
+        <div class="video-card glass-card">
+            <a href="{{ url_for('watch', video_id=video.id) }}" class="video-thumbnail-link">
+                <div class="video-thumbnail">
+                    <img src="{{ url_for('static', filename='thumbnails/' + video.thumbnail) }}" 
+                         alt="{{ video.title }}" loading="lazy"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="thumbnail-placeholder" style="display:none;">
+                        <svg viewBox="0 0 24 24" width="48" height="48">
+                            <path fill="white" d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+                    <span class="video-duration">{{ video.duration }}</span>
+                </div>
+            </a>
+            <div class="video-info">
+                <h3 class="video-title">
+                    <a href="{{ url_for('watch', video_id=video.id) }}">{{ video.title }}</a>
+                </h3>
+                <span class="channel-name">{{ video.channel_name }}</span>
+                <div class="video-meta">
+                    <span>{{ video.views }} views</span>
+                    <span>•</span>
+                    <span>{{ video.created_at[:10] }}</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="no-results glass-card">
+        <svg viewBox="0 0 24 24" width="64" height="64">
+            <path fill="#666" d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+        <p>No videos found matching your search.</p>
+        <p class="search-suggestion">Try different keywords or browse categories.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
